@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AD7 STORE – Hasilpur Special Deals</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand"><div class="logo">AD7</div><div>
+      <h1>AD7 STORE</h1>
+      <p class="sub">Cash on Delivery – Hasilpur Special Deals</p>
+    </div></div>
+    <nav><a href="/dashboard.html">Orders</a> · <a href="/admin.html">Admin</a></nav>
+  </div>
+</header>
+
+<main>
+  <section class="items" id="items">
+    <!-- products loaded from /api/products -->
+  </section>
+</main>
+
+<!-- Popup Form -->
+<div id="popup" class="popup" aria-hidden="true">
+  <div class="form-box" role="dialog" aria-modal="true">
+    <h2 id="popupTitle">Order</h2>
+    <input id="name" placeholder="Full Name">
+    <input id="phone" placeholder="Phone Number">
+    <input id="email" placeholder="Email">
+    <input id="address" placeholder="Address">
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn" onclick="orderNow()">Order Now</button>
+      <button class="btn alt" onclick="closePopup()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AD7STORE — Orders Dashboard</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><div class="header-inner"><div class="brand"><div class="logo">AD7</div><div>
+  <h1>AD7 STORE</h1>
+  <p class="sub">Orders Dashboard</p>
+</div></div><nav><a href="/index.html">Shop</a> · <a href="/admin.html">Admin</a></nav></div></header>
+
+<main style="max-width:1100px;margin:28px auto;padding:0 20px">
+  <h1>📦 Orders Dashboard</h1>
+  <p class="muted">Orders are stored in your GitHub repo via Vercel serverless functions.</p>
+
+  <div style="margin-top:14px">
+    <button class="btn" onclick="load()">Refresh</button>
+    <button class="btn alt" onclick="download()">Download JSON</button>
+  </div>
+
+  <div id="orders" style="margin-top:18px"></div>
+</main>
+
+<script>
+async function load() {
+  const el = document.getElementById('orders');
+  el.innerHTML = '<p class="muted">Loading…</p>';
+  try {
+    const res = await fetch('/api/get-orders');
+    if(!res.ok) throw new Error('fetch failed ' + res.status);
+    const data = await res.json();
+    if(!data || !data.length) { el.innerHTML = '<p class="muted">No orders found.</p>'; return; }
+    el.innerHTML = '';
+    data.forEach(o => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `<h3>${o.itemName}</h3>
+        <p><b>Name:</b> ${o.customer.name} · <b>Phone:</b> ${o.customer.phone}</p>
+        <p><b>Email:</b> ${o.customer.email}</p>
+        <p><b>Address:</b> ${o.customer.address}</p>
+        <p class="small">Saved: ${o.date || o.createdAt || ''}</p>`;
+      el.appendChild(div);
+    });
+  } catch (e) {
+    el.innerHTML = '<p class="muted">Unable to load orders. See console for details.</p>';
+    console.error(e);
+  }
+}
+
+function download(){
+  fetch('/api/get-orders').then(r=>r.json()).then(data=>{
+    const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'ad7_orders.json'; a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+load();
+</script>
+</body>
+</html>
